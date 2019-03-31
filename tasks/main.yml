@@ -16,7 +16,7 @@
   changed_when: false
   check_mode: false
 
-- name: Set HAProxy version.
+- name: Override default variables.
   set_fact:
     haproxy_version: "{{ '1.5' if '1.5.' in haproxy_version_result.stdout else '1.4' }}"
 
@@ -30,3 +30,9 @@
 
 - name: Ensure HAProxy is started and enabled on boot.
   service: name=haproxy state=started enabled=yes
+
+- name: Set haproxy_connect_any flag on and keep it persistent across reboots
+  seboolean:
+    name: haproxy_connect_any
+    state: yes
+    persistent: yes
